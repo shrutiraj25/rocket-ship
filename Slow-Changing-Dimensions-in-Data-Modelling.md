@@ -8,7 +8,10 @@
    
 ---   
     
-## TL;DR
+## TL;DR  
+Palantir Foundry outshines other data pipeline solutions (AWS, GCP, Azure ADF, DataBricks, Spark Declarative Pipelines) in handling of Slow-Chaning dimensions, esp. when it comes to mission critical enterprise data - high voloume, high variety, high scrutiny, lineage and auditability, high security.  
+This is a summary view of all the benefits of Foundry.  
+  
 ```mermaid
 flowchart TD
     A["Source Systems (Snapshots / Deltas / CDC)"]
@@ -48,7 +51,7 @@ flowchart TD
 
     H --> M["Safer SCD Refactoring vs. Manual Orchestration"]
     I --> N["Stronger Regulatory / Compliance Support"]
-    K --> O["Less Pipeline Glue vs. ADF / Glue / Composer"]
+    K --> O["Less Pipeline Glue or Boilerplate vs. ADF / AWS-Glue / Composer etc."]
     L --> P["Consistent Security vs. Fragmented IAM"]
 
     M --> Q["Operational Advantage for SCD0–SCD6"]
