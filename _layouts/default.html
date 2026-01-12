@@ -9,6 +9,22 @@
     <script type="module">
       import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
       mermaid.initialize({ startOnLoad: true });
+      // try to replace ```mermaid in the markdown with a <div>
+      // so that mermaid.js can pick up the blocks and hopefully render the diagrams on GH pages too...
+      document.addEventListener("DOMContentLoaded", () => {
+        // this is how jekyll will emit the mermaid blocks
+        const codeBlocks = document.querySelectorAll("pre > code.language-mermaid");
+        codeBlocks.forEach((code) => {
+          const pre = code.parentElement;
+          const mermaidText = code.textContent;
+          const div = document.createElement("div");
+          div.className = "mermaid";
+          div.textContent = mermaidText;
+          // yeah right...
+          pre.replaceWith(div);
+        });
+        mermaid.run();
+      });
     </script>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="{{ '/assets/js/respond.js' | relative_url }}"></script>
