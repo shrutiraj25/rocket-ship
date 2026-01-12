@@ -99,17 +99,17 @@ flowchart TD
 ### Insurance example (customer DOB fixed)
 
 ```python
-from transforms.api import transform, Input, Output
-from pyspark.sql import functions as F
+from transforms.api import transform, Input, Output # PALANTIR LIBRARIES
+from pyspark.sql import functions as F # NORMAL PYSPARK LIBRARIES
 
 @transform(
     prev_dim=Input("ri.ins.dim.customer"),
     src=Input("ri.ins.src.customer_snapshot"),
     out=Output("ri.ins.dim.customer_type0")
-)
+) # PALANTIR WAY OF DESIGNING INPUT AND OUTPUT TO A PIPELINE
 def compute(prev_dim, src, out):
     # Only insert new customers; ignore changes to existing
-    new_keys = src.join(prev_dim.select("customer_id"), "customer_id", "left_anti")
+    new_keys = src.join(prev_dim.select("customer_id"), "customer_id", "left_anti") # ANTI JOIN ON CUSTOMER ID DROPPING THE NON MATCH ROWS
     out.write(prev_dim.unionByName(new_keys))
 ```
 
@@ -395,18 +395,20 @@ from transforms.api import transform, Input, Output
 from pyspark.sql import functions as F
 
 @transform(
-    cur_dim=Input("ri.ins.dim.agent_current"),
-    hist_dim=Input("ri.ins.dim.agent_history"),
-    src=Input("ri.ins.src.agent_delta"),
-    cur_out=Output("ri.ins.dim.agent_current_out"),
-    hist_out=Output("ri.ins.dim.agent_history_out")
+    cur_dim=Input("ri.ins.dim.agent_current"),# OLD DATA
+    hist_dim=Input("ri.ins.dim.agent_history"),# HISTORY TABLE
+    src=Input("ri.ins.src.agent_delta"), # NEW DATA
+    cur_out=Output("ri.ins.dim.agent_current_out"), # UPDATED DATA
+    hist_out=Output("ri.ins.dim.agent_history_out") # UPDATED HISTORY TABLE
 )
 def compute(cur_dim, hist_dim, src, cur_out, hist_out):
     c = cur_dim.alias("c")
     s = src.alias("s")
     j = c.join(s, "agent_id", "inner")
-    changed = j.filter(F.col("c.plan") != F.col("s.plan")).select("c.*")
-    hist_out.write(hist_dim.unionByName(changed))
+    changed = j.filter(F.col("c.plan") != F.col("s.plan")).select("c.*") # GETTIG THE DATA CHNAGED
+    hist_out.write(hist_dim.unionByName(changed)) #STORING THE CHNAGED DATA
+
+    # GETTING NEW DATA AND TAKING UNION OF NEW DATA WITH OLD DATA
     updated_cur = cur_dim.join(changed.select("agent_id"), "agent_id", "left_anti") \
         .unionByName(src.select("agent_id", "plan"))
     cur_out.write(updated_cur)
@@ -419,18 +421,20 @@ from transforms.api import transform, Input, Output
 from pyspark.sql import functions as F
 
 @transform(
-    cur_dim=Input("scm.dim.route_current"),
-    hist_dim=Input("scm.dim.route_history"),
-    src=Input("scm.src.route_delta"),
-    cur_out=Output("scm.dim.route_current_out"),
-    hist_out=Output("scm.dim.route_history_out")
+    cur_dim=Input("scm.dim.route_current"),# OLD DATA
+    hist_dim=Input("scm.dim.route_history"),# HISTORY TABLE
+    src=Input("scm.src.route_delta"),# NEW DATA
+    cur_out=Output("scm.dim.route_current_out"),# UPDATED DATA
+    hist_out=Output("scm.dim.route_history_out")# UPDATED HISTORY TABLE
 )
 def compute(cur_dim, hist_dim, src, cur_out, hist_out):
     c = cur_dim.alias("c")
     s = src.alias("s")
     j = c.join(s, "route_id", "inner")
-    changed = j.filter(F.col("c.cost") != F.col("s.cost")).select("c.*")
-    hist_out.write(hist_dim.unionByName(changed))
+    changed = j.filter(F.col("c.cost") != F.col("s.cost")).select("c.*") # GETTIG THE DATA CHNAGED
+    hist_out.write(hist_dim.unionByName(changed)) #STORING THE CHNAGED DATA
+
+    # GETTING NEW DATA AND TAKING UNION OF NEW DATA WITH OLD DATA
     new_cur = cur_dim.join(changed.select("route_id"), "route_id", "left_anti") \
         .unionByName(src.select("route_id", "cost"))
     cur_out.write(new_cur)
@@ -481,22 +485,22 @@ from transforms.api import transform, Input, Output
 from pyspark.sql import functions as F
 
 @transform(
-    core_prev=Input("ri.ins.dim.policy_core"),
-    mini_prev=Input("ri.ins.dim.policy_behavior_mini"),
-    src=Input("ri.ins.src.policy_snapshot"),
+    core_prev=Input("ri.ins.dim.policy_core"), # MAIN DIMENSION SCD - 1
+    mini_prev=Input("ri.ins.dim.policy_behavior_mini"),#SCD TYPE - 2 FOR BEHAVIOUR
+    src=Input("ri.ins.src.policy_snapshot"), # NEW DATA
     core_out=Output("ri.ins.dim.policy_core_out"),
     mini_out=Output("ri.ins.dim.policy_behavior_mini_out")
 )
 def compute(core_prev, mini_prev, src, core_out, mini_out):
-    behavior_cols = ["risk_score", "channel"]
-    beh = src.select("policy_id", *behavior_cols)
-    beh_keyed = beh.withColumn("behavior_key", F.sha2(F.concat_ws("||", *behavior_cols), 256))
-    new_beh = beh_keyed.join(mini_prev.select("behavior_key"), "behavior_key", "left_anti")
-    mini_out.write(mini_prev.unionByName(new_beh))
+    behavior_cols = ["risk_score", "channel"] # COLUMNS TO TRACK
+    beh = src.select("policy_id", *behavior_cols) # EXTRACT THE TRACKING COLUMNS
+    beh_keyed = beh.withColumn("behavior_key", F.sha2(F.concat_ws("||", *behavior_cols), 256)) # CONCATENATING BEHAVIOUR COLUMNS
+    new_beh = beh_keyed.join(mini_prev.select("behavior_key"), "behavior_key", "left_anti") # KEEPING ONLY NEW BEHAVIOUR COLUMNS
+    mini_out.write(mini_prev.unionByName(new_beh)) # WRITING TO MINI DIMENSION (SCD TYPE 2 )
     core = src.select("policy_id", "insured_name").join(
         beh_keyed.select("policy_id", "behavior_key"), "policy_id"
-    )
-    base = core_prev.join(core.select("policy_id"), "policy_id", "left_anti")
+    )# WRITING TO MAIN DIMENSION (SCD TYPE 1 )
+    base = core_prev.join(core.select("policy_id"), "policy_id", "left_anti") #JOIN ONLY TH ECHNAGED ONES
     core_out.write(base.unionByName(core))
 ```
 
@@ -507,21 +511,21 @@ from transforms.api import transform, Input, Output
 from pyspark.sql import functions as F
 
 @transform(
-    core_prev=Input("scm.dim.product_core"),
-    mini_prev=Input("scm.dim.product_demand_mini"),
-    src=Input("scm.src.product_snapshot"),
+    core_prev=Input("scm.dim.product_core"),# MAIN DIMENSION SCD - 1
+    mini_prev=Input("scm.dim.product_demand_mini"),#SCD TYPE - 2 FOR BEHAVIOUR
+    src=Input("scm.src.product_snapshot"),# NEW DATA
     core_out=Output("scm.dim.product_core_out"),
     mini_out=Output("scm.dim.product_demand_mini_out")
 )
 def compute(core_prev, mini_prev, src, core_out, mini_out):
-    demand_cols = ["avg_daily_demand", "seasonality_bucket"]
-    d = src.select("product_id", *demand_cols)
-    d_keyed = d.withColumn("demand_key", F.sha2(F.concat_ws("||", *demand_cols), 256))
-    new_d = d_keyed.join(mini_prev.select("demand_key"), "demand_key", "left_anti")
-    mini_out.write(mini_prev.unionByName(new_d))
+    demand_cols = ["avg_daily_demand", "seasonality_bucket"] # COLUMNS TO TRACK
+    d = src.select("product_id", *demand_cols) # EXTRACT THE TRACKING COLUMNS
+    d_keyed = d.withColumn("demand_key", F.sha2(F.concat_ws("||", *demand_cols), 256)) # CONCATENATING BEHAVIOUR COLUMNS
+    new_d = d_keyed.join(mini_prev.select("demand_key"), "demand_key", "left_anti") # KEEPING ONLY NEW BEHAVIOUR COLUMNS
+    mini_out.write(mini_prev.unionByName(new_d)) # WRITING TO MINI DIMENSION (SCD TYPE 2 )
     core = src.select("product_id", "name").join(
         d_keyed.select("product_id", "demand_key"), "product_id"
-    )
+    )# WRITING TO MAIN DIMENSION (SCD TYPE 1 )
     base = core_prev.join(core.select("product_id"), "product_id", "left_anti")
     core_out.write(base.unionByName(core))
 ```
@@ -571,9 +575,10 @@ flowchart TD
 ### Insurance example (customer address SCD2, name Type1)
 
 ```python
-from transforms.api import transform, Input, Output
+from transforms.api import transform, Input, Output # PALANTIR PIPELINE DECORATORS
 from pyspark.sql import functions as F
 
+# PIPELINE I/O
 @transform(
     prev_dim=Input("ri.ins.dim.customer_scd6"),
     src=Input("ri.ins.src.customer_snapshot"),
@@ -585,35 +590,42 @@ def compute(prev_dim, src, out):
     s = src.alias("s")
     j = cur.join(s, "customer_id")
     addr_changed = j.filter(
-        (F.col("d.address") != F.col("s.address")) | (F.col("d.city") != F.col("s.city"))
+        (F.col("d.address") != F.col("s.address")) | (F.col("d.city") != F.col("s.city")) # GETTING DATA WHERE ADDRESS NOT MATCHING ( HENCE ADDRESS IS CHNAGED IN THE CURRENT DATA)
     ).select(
         "customer_id",
         F.col("s.address").alias("address"),
         F.col("s.city").alias("city"),
         F.col("s.name").alias("name")
     )
-    closed = cur.join(addr_changed.select("customer_id"), "customer_id") \
-        .withColumn("effective_end", today - F.expr("INTERVAL 1 DAY")) \
-        .withColumn("is_current", F.lit(0))
+    # ClOSING OLD ADDRESS 
+    closed = cur.join(addr_changed.select("customer_id"), "customer_id") \ # SELECTING AFFECTED CUSTOMERS
+        .withColumn("effective_end", today - F.expr("INTERVAL 1 DAY")) \ # PUTTNG END DATES OF OLD ADDRESS
+        .withColumn("is_current", F.lit(0)) # MARKING OLD ADDDRESS INACTIVE
+
+    # ADDING NEW ADDRESS 
     new_rows = addr_changed.withColumn("effective_start", today) \
         .withColumn("effective_end", F.lit(None).cast("date")) \
         .withColumn("is_current", F.lit(1))
+
+    # OVERWRITING THE USER NAMES (SCD TYPE 1)
     name_updates = j.filter(F.col("d.name") != F.col("s.name")).select(
         "customer_id", F.col("s.name").alias("name")
     )
     cur_updated = cur.join(name_updates, "customer_id", "left") \
         .withColumn("name", F.coalesce(F.col("name"), F.col("d.name")))
-    unchanged = cur_updated.join(addr_changed.select("customer_id"), "customer_id", "left_anti")
+    unchanged = cur_updated.join(addr_changed.select("customer_id"), "customer_id", "left_anti") # GETTING ONLY THOSE WITH UNCHNAGED ADDRESS
     hist = prev_dim.filter("is_current = 0")
-    out.write(hist.unionByName(closed).unionByName(unchanged).unionByName(new_rows))
+
+    out.write(hist.unionByName(closed).unionByName(unchanged).unionByName(new_rows)) # ADDING NEW ROWS SCD TYPE 2
 ```
 
 ### Supply-chain example (supplier rating SCD2, email Type1)
 
 ```python
-from transforms.api import transform, Input, Output
+from transforms.api import transform, Input, Output # PALANTIR PIPELINE DECORATORS
 from pyspark.sql import functions as F
 
+# PIPELINE I/O
 @transform(
     prev_dim=Input("scm.dim.supplier_scd6"),
     src=Input("scm.src.supplier_snapshot"),
@@ -628,21 +640,27 @@ def compute(prev_dim, src, out):
         "supplier_id",
         F.col("s.rating").alias("rating"),
         F.col("s.contact_email").alias("contact_email")
-    )
+    ) # GETTING DATA WHERE RATING NOT MATCHING ( HENCE RATING IS CHNAGED IN THE CURRENT DATA)
+
+    # CLOSING OLD RECORDS
     closed = cur.join(rating_changed.select("supplier_id"), "supplier_id") \
         .withColumn("effective_end", today - F.expr("INTERVAL 1 DAY")) \
         .withColumn("is_current", F.lit(0))
+
+    # GETTING NEW RATINGS FOR THE ABOVE CLOSED ONES (SCD - 2)
     new_rows = rating_changed.withColumn("effective_start", today) \
         .withColumn("effective_end", F.lit(None).cast("date")) \
         .withColumn("is_current", F.lit(1))
+
+    # OVERWRITING OLD EMAIL ADDRESS WITH NEWS (SCD - 1)
     email_updates = j.filter(F.col("d.contact_email") != F.col("s.contact_email")).select(
         "supplier_id", F.col("s.contact_email").alias("contact_email")
     )
     cur_updated = cur.join(email_updates, "supplier_id", "left") \
         .withColumn("contact_email", F.coalesce(F.col("contact_email"), F.col("d.contact_email")))
-    unchanged = cur_updated.join(rating_changed.select("supplier_id"), "supplier_id", "left_anti")
+    unchanged = cur_updated.join(rating_changed.select("supplier_id"), "supplier_id", "left_anti") # GETTING THE UNCHANGED DATA
     hist = prev_dim.filter("is_current = 0")
-    out.write(hist.unionByName(closed).unionByName(unchanged).unionByName(new_rows))
+    out.write(hist.unionByName(closed).unionByName(unchanged).unionByName(new_rows)) # UNION OF ALL NEW AND OLD ROWS SCD -2
 ```
 
 ---
@@ -710,10 +728,11 @@ When choosing:
 Example SQL checks:
 ```sql
 -- ensure single current row
-SELECT business_key
+-- 
+SELECT business_key 
 FROM dim
-GROUP BY business_key
-HAVING SUM(CASE WHEN is_current = 1 THEN 1 ELSE 0 END) > 1;
+GROUP BY business_key 
+HAVING SUM(CASE WHEN is_current = 1 THEN 1 ELSE 0 END) > 1; -- GETTING ACTIVE AND NON ACTIVE ONES AND FILTERING ONLY ROWS WITH ONE OR MORE THE ACTIVE ONES
 
 -- find out-of-order dates
 SELECT * FROM dim WHERE effective_end IS NOT NULL AND effective_end < effective_start;
