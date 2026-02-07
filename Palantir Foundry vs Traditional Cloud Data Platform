@@ -308,42 +308,24 @@ Incremental logic is engineer-defined:
 Watermarks
 
 Merge logic
-
 CDC pipelines
-
 Partition filters
-
 Custom checkpoints
-
 More control, more complexity.
-
 Operational Use Cases
 Foundry
-
 Designed for:
-
 Operational workflows
-
 Decision support apps
-
 Scenario modeling
-
 Real-time operations
-
 Human-in-the-loop systems
-
 Data → Ontology → Applications → Actions
-
 Traditional Cloud
-
 Primarily analytics-focused:
-
 BI dashboards
-
 ML pipelines
-
 Reporting
-
 Warehousing
 
 Operational apps require separate systems.
