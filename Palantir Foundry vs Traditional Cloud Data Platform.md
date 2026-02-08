@@ -57,347 +57,121 @@ Philosophy:
 Choose best tools → Integrate them yourself
 
 
-Pipeline Development
-Foundry Pipelines
+Example 1 — Dataset Transformation
+# Palantir Foundry Transform (PySpark)
+```bash
 
-Foundry uses Transforms & Pipelines:
+from transforms.api import transform, Input, Output
+from pyspark.sql.functions import col, when
 
-Dataset-centric development
+@transform(
+    output=Output("/analytics/claims/claims_enriched"),
+    claims=Input("/raw/claims"),
+    customers=Input("/master/customers")
+)
+def compute(output, claims, customers):
 
-Automatic dependency tracking
+    df = claims.join(customers, "customer_id", "left")
 
-Built-in lineage
+    enriched = df.withColumn(
+        "risk_flag",
+        when(col("claim_amount") > 100000, "HIGH").otherwise("NORMAL")
+    )
 
-Incremental recomputation
+    output.write_dataframe(enriched)
 
-Versioned datasets
+```
+What this shows
 
-Dev → Prod promotion built-in
+Dataset inputs declared
+Output dataset declared
+Dependency tracking automatic
+No orchestration code required
 
-Example Flow
-Raw Dataset → Clean Transform → Business Transform → Ontology Object
 
+# Example 2 — Incremental Processing
+# Traditional Spark Job (Standalone)
+```bash
+@transform(
+    output=Output("/analytics/sales/daily_incremental"),
+    sales=Input("/raw/sales")
+)
+def compute(ctx, output, sales):
 
-Platform automatically:
+    last_run = ctx.previous_run_timestamp
 
-Detects upstream changes
+    incremental_df = sales.dataframe().filter(
+        col("ingest_ts") > last_run
+    )
 
-Recomputes downstream
+    output.write_dataframe(incremental_df)
+```
+Platform provides:
 
-Tracks versions
+Previous run context
+Incremental execution support
+Built-in recompute logic
 
-Records lineage
 
-No external orchestration needed.
+# Traditional Incremental Merge (Spark + Delta)
+```bash
+from delta.tables import DeltaTable
 
-Traditional Cloud Pipelines
+delta_table = DeltaTable.forPath(
+    spark,
+    "s3://bucket/analytics/sales_delta"
+)
 
-Pipelines built using orchestration tools:
+updates = spark.read.parquet("s3://bucket/raw/sales_new")
 
-Airflow DAGs
+delta_table.alias("t").merge(
+    updates.alias("s"),
+    "t.id = s.id"
+).whenMatchedUpdateAll() \
+ .whenNotMatchedInsertAll() \
+ .execute()
 
-Databricks workflows
+```
 
-Azure Data Factory
-
-Glue Jobs
-
-Custom schedulers
-
-Engineers must manage:
-
-Task dependencies
-
-Retry logic
-
-Failure recovery
-
-State tracking
-
-Backfills
-
-Incremental logic
-
-More flexibility — more responsibility.
-
-Data Lineage
-Foundry
-
-Lineage is automatic and native:
-
-Column-level lineage
-
-Dataset-level lineage
-
-Transform-level lineage
-
-Full graph visualization
-
-Impact analysis built-in
-
-No extra configuration needed.
-
-Traditional Cloud
-
-Lineage requires extra tooling:
-
-OpenLineage
-
-DataHub
-
-Collibra
-
-Glue Catalog
-
-Purview
-
-Often:
-
-Partial lineage
-
-Manual tagging required
-
-Cross-tool lineage gaps
-
-Governance & Security
-Foundry Governance
-
-Built into platform core:
-
-Row-level security
-
-Column-level security
-
-Object-level permissions
-
-Dataset version control
-
-Audit trails
-
-Policy enforcement
-
-Security travels with the dataset.
-
-Traditional Cloud Governance
-
-Handled across services:
-
-IAM policies
-
-Lake Formation / Purview
-
-Warehouse RBAC
-
-BI tool permissions
-
-Challenges:
-
-Fragmented policies
-
-Cross-tool sync issues
-
-Manual governance mapping
-
-Ontology Layer (Major Difference)
-Foundry Ontology
-
-Foundry includes an Ontology Layer:
-
-Maps datasets → business objects:
-
-Examples:
-
-Customer
-
-Asset
-
-Claim
-
-Supplier
-
-Supports:
-
-Objects
-
-Links
-
-Actions
-
-Operational workflows
-
-Applications
-
-This enables:
-
-Operational analytics
-
-Business applications
-
-Decision systems
-
-Traditional Cloud Platforms
-
-No native ontology layer.
-
-Must build separately using:
-
-Semantic layers
-
-Knowledge graphs
-
-Application databases
-
-Custom APIs
-
-More engineering effort required.
-
-Development Experience
-Foundry
-
-UI + Code Workbooks
-
-Transform builder
-
-Built-in preview
-
-Dataset diff
-
-Version rollback
-
-One-click rebuild
-
-Built-in test datasets
-
-Highly guided experience.
-
-Traditional Cloud
-
-Depends on tools:
-
-Notebook based
-
-IDE based
-
-SQL tools
-
-CI/CD pipelines
-
-External testing frameworks
-
-More flexible but fragmented.
-
-Incremental Processing
-Foundry
-
-Incremental logic is platform-native:
-
-Change detection
-
-Snapshot diff
-
-Partition awareness
-
-Incremental recompute
-
-Minimal custom logic required.
-
-Traditional Cloud
-
-Incremental logic is engineer-defined:
-
-Watermarks
+Here you must implement:
 
 Merge logic
-CDC pipelines
-Partition filters
-Custom checkpoints
-More control, more complexity.
-Operational Use Cases
-Foundry
-Designed for:
-Operational workflows
-Decision support apps
-Scenario modeling
-Real-time operations
-Human-in-the-loop systems
-Data → Ontology → Applications → Actions
-Traditional Cloud
-Primarily analytics-focused:
-BI dashboards
-ML pipelines
-Reporting
-Warehousing
 
-Operational apps require separate systems.
+Idempotency
 
-Tradeoffs Summary
-Palantir Foundry — Strengths
+State handling
 
-Fully integrated platform
+# Example 3 — Orchestration
+Traditional Airflow DAG
+```bash
+from airflow import DAG
+from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+from datetime import datetime
 
-Native governance & lineage
+with DAG("claims_pipeline", start_date=datetime(2025,1,1)) as dag:
 
-Ontology-driven modeling
+    spark_job = SparkSubmitOperator(
+        task_id="claims_job",
+        application="/jobs/claims_job.py",
+        conn_id="spark_default"
+    )
 
-Dataset-centric pipelines
+    spark_job
+```
+You must manage:
 
-Built-in operational apps
+Scheduling
+Retries
+Dependencies
+Monitoring
 
-Lower integration overhead
 
-Palantir Foundry — Limitations
+Foundry Pipeline
+```bash
+Input datasets → Transform → Output datasets
+```
 
-Opinionated platform
 
-Less tool flexibility
 
-Vendor lock-in risk
 
-Requires platform adoption
 
-Traditional Cloud — Strengths
-
-Tool flexibility
-
-Best-of-breed selection
-
-Open ecosystem
-
-Custom architecture freedom
-
-Lower vendor dependency
-
-Traditional Cloud — Limitations
-
-Integration overhead
-
-Fragmented governance
-
-Manual lineage setup
-
-More DevOps burden
-
-When to Choose What
-Choose Foundry When
-
-Strong governance required
-
-Operational workflows needed
-
-Cross-team data collaboration
-
-Regulated environments
-
-Rapid enterprise deployment
-
-Choose Traditional Cloud When
-
-Custom architecture needed
-
-Tool flexibility is priority
-
-Existing cloud stack mature
-
-Platform lock-in is concern
-
-Specialized workloads dominate
