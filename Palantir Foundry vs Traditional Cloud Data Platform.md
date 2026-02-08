@@ -176,9 +176,9 @@ Input datasets → Transform → Output datasets
 1. Native Ontology Layer (Not Just Tables — Business Objects)
    Foundry provides a built-in Ontology layer that maps datasets into:
 
-Business objects
-Relationships (links)
-Actions
+Business objects - Objects represent real-world entities. eg - supplier, Claim, Aircraft, Transaction
+Relationships (links) - Links define how objects connect.
+Actions - Actions are operations that can be executed on objects.. Eg - Insert Object, Delete Object, Trigger Inspection
 Workflows
 Operational decisions
 
@@ -233,6 +233,13 @@ Data diff between versions
 Rollback support
 Data pipelines behave like software releases.
 
+In Palantir Foundry, data pipelines behave like software releases, not just scheduled jobs.
+Instead of manually managing environments and deployments, Foundry provides a native promotion workflow for:
+Transforms, Datasets, Pipelines, Ontology changes, Applications
+This is built directly into the platform — not added via external CI/CD tooling.
+
+Palantir Foundry includes a built-in Dev → Test → Prod promotion model where data pipelines behave like software releases. Engineers develop changes in isolated branches with fully versioned datasets and transforms, validate outputs using dataset diffs, and promote updates through controlled workflows. Every dataset and transform version is reproducible and rollback-ready. Unlike traditional cloud data platforms — where environment promotion requires custom CI/CD and infrastructure duplication — Foundry provides native, branch-based data development and safe promotion as a platform feature.
+
 Traditional Cloud
 
 Usually requires:
@@ -256,6 +263,17 @@ You can answer:
 “What did this dataset look like 3 months ago?”
 Instantly.
 
+In Palantir Foundry, datasets are not mutable tables that get overwritten.
+
+Instead, every dataset build creates a new immutable version (snapshot).
+
+```bash
+Not: overwrite table
+But: create new dataset version
+```
+
+In Palantir Foundry, every dataset is automatically versioned and stored as immutable snapshots. Each build produces a new dataset version tied to the exact input versions, transform code, and execution context, making outputs fully reproducible and auditable. Engineers can instantly time-travel to see what a dataset looked like at any point in the past, compare versions, and roll back if needed. Unlike traditional cloud platforms — where table history and time travel require specific storage formats and extra configuration — Foundry provides dataset versioning and historical traceability by default across the platform.
+
 Traditional Cloud
 
 Needs:
@@ -278,6 +296,29 @@ Ontology-aware permissions
 Policy inheritance downstream
 When data flows → policies flow.
 
+
+In Palantir Foundry, security is embedded directly into datasets and ontology objects, making data policy-aware by design. Row-level filters, column masking, object-level permissions, and ontology-aware access rules are defined once and automatically enforced across transforms, notebooks, applications, and analytics. Security policies also propagate downstream through lineage, so derived datasets inherit upstream protections. This “security travels with data” model reduces policy drift and eliminates the need to reimplement access controls across multiple tools — a common challenge in traditional cloud data platforms.
+
+```bash
+
+User Role: Investigator
+Can:
+  view Claim
+  update Claim status
+
+Cannot:
+  delete Claim
+  approve Claim payout
+
+
+```
+
+This supports:
+
+Operational workflows
+Case management
+Decision systems
+Action controls
 Traditional Cloud
 
 Security is usually:
@@ -301,6 +342,22 @@ Supply chain control towers
 Directly on top of the same governed data.
 No separate app stack required.
 
+
+Palantir Foundry enables teams to build operational applications directly on top of governed datasets and ontology objects, not just analytics dashboards. Because business entities, relationships, actions, workflows, and security are all native to the platform, organizations can create investigation tools, case management systems, decision workflows, and operational control towers without building a separate backend application stack. Actions taken in these apps are policy-enforced and fully audited, keeping data, decisions, and operations tightly integrated — a capability that typically requires multiple additional systems in traditional cloud architectures.
+
+# Foundry Architecture Pattern
+```bash
+Datasets
+   ↓
+Transforms
+   ↓
+Ontology Objects
+   ↓
+Actions + Workflows
+   ↓
+Operational Application
+```
+
 Traditional Cloud
 
 Requires:
@@ -322,6 +379,12 @@ Impact graph known
 Partial recompute supported
 Incremental recompute supported
 Engineers don’t manage DAG logic manually.
+
+Palantir Foundry automatically recomputes downstream datasets when upstream data changes because pipeline execution is driven by dataset dependencies rather than manually defined job DAGs. The platform continuously maintains a dependency and impact graph, marks affected datasets as stale, and recomputes only what is necessary. It supports partial and incremental recompute, partition-aware execution, and failure recovery without requiring orchestration code. Engineers declare inputs and outputs — Foundry handles ordering, retries, and recomputation automatically — significantly reducing pipeline management overhead compared to traditional cloud orchestration models.
+# What Happens When Upstream Data Changes?
+```bash
+raw/claims → cleaned_claims → enriched_claims → risk_metrics
+```
 
 Traditional Cloud
 
