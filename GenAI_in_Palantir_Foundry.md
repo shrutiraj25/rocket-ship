@@ -4,7 +4,7 @@
 
 ## Introduction
 
-Palantir Foundry often outpaces a DIY, primitive-based cloud stack (AWS/Azure/GCP + assorted services) when delivering GenAI in enterprise environments. While cloud providers offer powerful building blocks, Foundry’s Ontology gives models immediate business context, AIP Logic streamlines the development loop, and its unified security model reduces Time-to-Market, turning prototypes into production-grade applications in weeks instead of months in many real-world scenarios.
+Palantir Foundry provides a vertically integrated operating system for Generative AI that contrasts with the distributed primitive approach of cloud hyperscalers (AWS/Azure/GCP). While hyperscalers offer raw compute and isolated model APIs, Foundry abstracts the integration layer via the Ontology. This architecture allows engineering teams to focus on function development, logic orchestration, and evaluation pipelines rather than infrastructure plumbing (e.g., vector database synchronization, context window management, and stateful tool execution).
 
 
 ## Overview
@@ -12,9 +12,9 @@ The barrier to entry for Generative AI is low. Any developer can grab an API key
 
 For Architects and CTOs, the decision usually falls into two camps: 
 
-- **Primitive Approach**: Azure/AWS/GCP services (e.g., Azure OpenAI, AWS Bedrock) + a vector DB + orchestration libraries (LangChain, Semantic Kernel) + custom microservices. 
+- **Primitive Approach**: Requires manual orchestration of Azure OpenAI, Pinecone (Vector DB), LangChain (Application Logic), and FastAPI (Tool Execution). Engineers are responsible for maintaining the "glue code" that synchronizes state between these disparate services. 
 
-- **Platform Approach**: An integrated operating system like Palantir Foundry that unifies data, security, AI, and applications. 
+- **Platform Approach**: Unifies the Data Layer, Logic Layer, and Application Layer. The Ontology serves as both the semantic graph and the vector store, on top of which we can create operational applications and LLM orchestrations.
 
 ![Hyperscalers vs Palantir](images/hyperscaler_vs_palantir.png?raw=true)
 
@@ -76,15 +76,14 @@ In a custom Azure stack, building an agent typically requires you to:
     - Executes the corresponding function 
     - Feeds outputs back to the model 
 - Manage conversation and application state in external stores (e.g., Redis, SQL). 
-- Wire this into a backend service and a frontend application. 
 
 Palantir **AIP Agent Studio** simplifies this pattern: 
 
 **Tools as Ontology Actions**  <br>
-You bind existing Ontology Actions (e.g., Create_WorkOrder, Reschedule_Shipment) as tools. Tool definitions and wiring are handled by the platform, so you don’t manually maintain schemas and function-calling conventions.
+Bind existing Ontology Actions (e.g., Create_WorkOrder, Reschedule_Shipment) as tools. Tool definitions and wiring are handled by the platform, so you don’t manually maintain schemas and function-calling conventions. Additionally you can create custom tools using Typescript and just plug it in the agent studio.
 
 **Application context awareness** <br>
-Agents running inside a Workshop app can read application variables directly (e.g., the currentIncident the user is viewing) without manually passing IDs and context for each call. 
+Agents running inside a Workshop app can read application variables directly (e.g., the currentIncident the user is viewing).
 
 **From assistant to automation** <br>
 The same agent can act: 
@@ -170,7 +169,6 @@ Now using Workshop, you can build an app that displays Incident list and detail 
 
 The user can additionally give feedback about the reply using the thumbs up/down button.
 ![genai-workshop-app](images/genai_workshop_app.png?raw=True)
-
 
 All of this is done within a single platform, with fewer separate services to integrate or writing any complex to code. This reduces end-to-end delivery time to a few weeks or less, with a more straightforward security and governance story.
 
