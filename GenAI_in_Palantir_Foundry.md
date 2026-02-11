@@ -15,7 +15,7 @@ title: "GenAI Applications in Palantir Foundry (AIP)"
 ## Collab     
 1. [Harsh Gautam](https://github.com/harsh-gautam), [LinkedIn](https://www.linkedin.com/in/harsh-gautam27/)    
 2. [Chinmay Sutar](https://github.com/chinmay08), [LinkedIn](https://www.linkedin.com/in/chinmay-sutar-a40135141/)
-3. Vrinda Makkar, [LinkedIn](https://www.linkedin.com/in/vrinda-makkar/)
+3. [Vrinda Makkar](https://github.com/vrindamakkar), [LinkedIn](https://www.linkedin.com/in/vrinda-makkar/)
 
 ## Introduction
 
