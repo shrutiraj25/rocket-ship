@@ -10,6 +10,13 @@ title: "GenAI Applications in Palantir Foundry (AIP)"
     
 <img src="./images/04-genai-aip-foundry.png" width="95%" align="center" alt="GenAI Applications in Palantir Foundry (AIP)" />
 
+
+
+## Collab     
+1. [Harsh Gautam](https://github.com/harsh-gautam), [LinkedIn](https://www.linkedin.com/in/harsh-gautam27/)    
+2. [Chinmay Sutar](https://github.com/chinmay08), [LinkedIn](https://www.linkedin.com/in/chinmay-sutar-a40135141/)
+3. [Vrinda Makkar](https://github.com/vrindamakkar), [LinkedIn](https://www.linkedin.com/in/vrinda-makkar/)
+
 ## Introduction
 
 Palantir Foundry provides a vertically integrated operating system for Generative AI that contrasts with the distributed primitive approach of cloud hyperscalers (AWS/Azure/GCP). While hyperscalers offer raw compute and isolated model APIs, Foundry abstracts the integration layer via the Ontology. This architecture allows engineering teams to focus on function development, logic orchestration, and evaluation pipelines rather than infrastructure plumbing (e.g., vector database synchronization, context window management, and stateful tool execution).

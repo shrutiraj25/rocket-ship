@@ -4,7 +4,7 @@
     <img src="./images/rocket-ship-03.png" width="95%" style="border: 0 !important; outline: none !important; box-shadow: none !important;" alt="A ship that runs on rockets, because engineering, Image © Shaurya Agarwal, 2026" />
 </div>
 
-<p align="center">Long-form posts on data engineering and technology in collaboration with my team</p>
+<p align="center">Long-form posts on AI, machine learning, data engineering and other technology topics, in collaboration with my team</p>
 
 <hr />
 
@@ -95,6 +95,8 @@
             <h4 style="margin-top: 15px !important; margin-bottom: 5px !important;">Collaborators:</h4>
             <ol style="margin-top: 0 !important;">
                 <li><a href="https://github.com/harsh-gautam">Harsh Gautam</a>, <a href="https://www.linkedin.com/in/harsh-gautam27/">LinkedIn</a></li>
+                <li><a href="https://github.com/vrindamakkar">Vrinda Makkar</a>, <a href="https://www.linkedin.com/in/vrinda-makkar/">LinkedIn</a></li>
+                <li><a href="https://github.com/chinmay08">Chinmay Sutar</a>, <a href="https://www.linkedin.com/in/chinmay-sutar-a40135141/">LinkedIn</a></li>
             </ol>
         </td>
     </tr>
