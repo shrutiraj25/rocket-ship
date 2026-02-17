@@ -351,7 +351,7 @@ Applications:<br>
 -	Policy comparison
 -	Context-aware Q&A
 
-### Why This Pipeline Is Effective
+#### Why This Pipeline Is Effective
 #### Capability Comparison: Pipeline Builder vs Typical No-Code Tools
 
 | Capability                 | Pipeline Builder        | Typical No-Code Tools |
@@ -363,5 +363,20 @@ Applications:<br>
 | **Explainability**            | ✓ Full lineage           | ✗ Minimal              |
 | **AI Readiness**              | ✓ Designed for AI        | ✗ Retro-fitted         |
 
+
+Pipeline Builder transforms messy, unstructured documents into precise, semantically rich embeddings—ready for AI models, copilots, and enterprise search with full transparency and traceability.
+
+### 2.)Unstructured Data preparation for AI modals using code repository:
+Preparing unstructured data, such as PDFs, for AI model training and inference is a common workflow in Palantir Foundry. This article outlines a robust, production-ready pipeline using the Foundry code repository, covering data ingestion from Microsoft SharePoint, PDF extraction (with a comparison of available libraries), normalization, semantic chunking, embedding strategies, vector database integration, data versioning, and guidance on choosing between snapshot and incremental transforms.
+<img width="1110" height="82" alt="image" src="https://github.com/user-attachments/assets/2547c891-31ec-40e9-874c-986c1297aa12" />
+
+#### Step 1: Data Ingestion from Microsoft SharePoint
+Foundry provides a SharePoint Online connector for ingesting files (including PDFs) directly into datasets. The connector supports file-based ingestion and can be configured for scheduled syncs.<br>
+
+**Setup Steps**:
+-	Register an application in Microsoft Entra ID (Azure AD) and grant the necessary Microsoft Graph permissions (e.g., Sites.Read.All for read access).
+-	In Foundry, open the Data Connection app and create a new source, selecting "SharePoint Online."
+-	Enter your Azure Client ID, Tenant ID, and Client Secret.
+-	Configure the connector to ingest files from your SharePoint site. The connector preserves file formats, so PDFs remain unchanged for downstream processing.
 
 
