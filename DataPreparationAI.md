@@ -226,4 +226,5 @@ The published ontology becomes the foundation for operational consumption across
 This structured data approach from utility-driven cleaning through semantic ontology mapping creates the governed foundation that enterprise AI requires. Clean data evolves into business-intelligent, AI-ready assets with full lineage, security controls, and semantic relationships that enable reliable, scalable AI applications.
 Next, we'll explore how this same principled approach extends to unstructured data, where documents and images present entirely different but equally critical challenges for AI readiness.
 
-
+## Unstructured Data Preparation
+In real-world scenarios, most data available for AI systems is **unstructured**. This includes text documents such as emails and articles, PDFs and PowerPoint files containing plain text, text and numeric tables, HTML documents, and system log files. Unlike structured datasets, unstructured data does not follow a predefined schema, making it significantly more challenging to process and prepare for modeling. Palantir Foundry offers two ways to work with the unstructured data 1.) Pipeline Builder   2.) Code Repository
