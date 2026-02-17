@@ -248,13 +248,13 @@ Unstructured Data → Parsing → Extraction → Text → Chunking → Tokenizat
 <img width="538" height="273" alt="image" src="https://github.com/user-attachments/assets/17e39c92-b2f2-4789-9d47-7bc0b5d29b35" />
 
 #### STEP‑BY‑STEP PIPELINE
-##### STEP 1 — Upload Unstructured Files to a Media Set
+#### STEP 1 — Upload Unstructured Files to a Media Set
 Unstructured documents like **PDFs, PPTs, scanned pages, or images** are uploaded into a Media Set.
 -	At this stage, files are still **raw binary data**.
 -	No semantic meaning exists yet.
 -	Pipeline Builder treats them as media assets awaiting parsing.
 
-##### STEP 2 — Create a Pipeline (Batch or Streaming)
+#### STEP 2 — Create a Pipeline (Batch or Streaming)
 Choose ingestion style:
 **Batch Pipelines**
 For historical or already‑ingested data.
@@ -264,7 +264,7 @@ Both modes apply the same transformations—only timing changes.
 
 <img width="657" height="233" alt="image" src="https://github.com/user-attachments/assets/13cd9351-2b01-4068-b365-d29e73618c92" />
 
-##### STEP 3 — Document Nature Identification
+#### STEP 3 — Document Nature Identification
 Every document is either:
 - Digitally Born PDFs
 Contain embedded selectable text.<br>
@@ -280,7 +280,7 @@ Contains only pixel-level text.<br>
 
 <img width="663" height="230" alt="image" src="https://github.com/user-attachments/assets/b87493c2-41a6-4af6-a893-6b5a84eb3433" />
 
-##### STEP 4 — Parse & Extract Text
+#### STEP 4 — Parse & Extract Text
 Start with:<br>
 
 **Block: Convert Media Set to Table Rows**
