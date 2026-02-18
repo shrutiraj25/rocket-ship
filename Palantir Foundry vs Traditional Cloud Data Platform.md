@@ -10,6 +10,35 @@ and operational applications into a single system.
 Traditional cloud data platforms (AWS / Azure / GCP stacks) are modular and tool-based, where teams assemble pipelines using separate services for storage,
 compute, orchestration, governance, and analytics.
 
+### High-Level Comparison
+
+| Dimension | Palantir Foundry | Traditional Cloud Stack |
+|------------|------------------|--------------------------|
+| Architecture | Integrated platform | Modular services |
+| Lineage | Automatic, column-level | External tooling |
+| Security | Policy-aware, embedded | Tool-specific IAM |
+| Versioning | Native dataset versioning | Storage-format dependent |
+| Orchestration | Dependency-driven | DAG-managed |
+| Operational Apps | Native | Requires separate backend |
+
+**Foundry Architecture Flow**
+```
+Raw Data
+   ↓
+Transforms
+   ↓
+Versioned Datasets
+   ↓
+Ontology Objects
+   ↓
+Actions & Workflows
+   ↓
+Operational Applications
+```
+**Traditional Stack Fragmentation**
+```
+S3 → Spark → Delta → Airflow → DataHub → BI → Backend App
+```
 
 ## Overview
 Modern data platforms aim to solve:
@@ -20,12 +49,12 @@ Modern data platforms aim to solve:
 - Security
 - Analytics
 Operational use cases:
-- Two dominant approaches exist:
-- - Approach A —> Palantir Foundry
-Platform-driven, dataset-centric, tightly integrated.
-- - Approach B —> Traditional Cloud Data Platforms
-Service-driven, tool-centric, loosely integrated.
-This document compares both across architecture, pipeline development, governance, security, and operational usage.
+- Two dominant architectural approaches exist:
+- - **Approach A — Platform-Centric (Palantir Foundry)**  
+Integrated, dataset-driven, execution managed by the platform.
+- - **Approach B — Tool-Centric (Traditional Cloud Stack)**  
+Service-driven, manually integrated components across the stack.<br>
+**This document compares both across architecture, pipeline development, governance, security, and operational usage**.
 
 
 ## Architecture Philosophy
@@ -473,5 +502,12 @@ Common in:
 - Finance
 - Manufacturing
 - Government
+
+#### When Traditional Cloud May Be Preferable
+
+- Highly cost-sensitive workloads
+- Organizations already heavily invested in cloud-native tooling
+- Lightweight analytics use cases
+- Teams requiring full stack-level customization
 
 Palantir Foundry is not just a data platform — it is a data operating system that unifies pipelines, governance, lineage, ontology, and operational applications. Traditional cloud platforms can achieve similar outcomes, but typically require integrating and maintaining multiple independent tools.
