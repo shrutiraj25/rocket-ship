@@ -10,7 +10,7 @@ title: "Data Preparation for AI"
 ## Collab     
 1. [Pavan Kumar Busetty](https://github.com/pavankumarbusetty), [LinkedIn](https://www.linkedin.com/in/pavankumar-busetty/)
 2. [Shivani Patil](https://github.com/shivanidp7), [LinkedIn](https://www.linkedin.com/in/shivani-patil-0b0825208?utm_source=share_via&utm_content=profile&utm_medium=member_android)
-3. [Shruthi Raj](https://github.com/shrutiraj25), [LinkedIn](http://linkedin.com/in/shruti-raj7)
+3. [Shruti Raj](https://github.com/shrutiraj25), [LinkedIn](http://linkedin.com/in/shruti-raj7)
 4. [Jaya Chandran](https://github.com/Jayachandran9283), [LinkedIn](https://www.linkedin.com/in/jaya-chandran-s-7ab3bab8?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app)
 5. [Shaurya Agarwal](https://www.linkedin.com/in/shauryashaurya/)
 
@@ -27,7 +27,9 @@ Poor data quality is the primary reason why 85% of AI projects fail in productio
 
 ### Enterprise Data Types & Core Challenges
 **Structured Data** (databases, spreadsheets, APIs): Format inconsistencies, missing values, logical violations, duplicate records
+
 **Unstructured Data** (PDFs, documents, images, emails): Mixed digital/scanned formats, complex layouts, OCR requirements, content extraction complexity
+
 **Semi-Structured Data** (JSON, XML, logs): Schema variations, nested hierarchies, encoding issues, format evolution over time
 
 ### The Foundry Advantage
