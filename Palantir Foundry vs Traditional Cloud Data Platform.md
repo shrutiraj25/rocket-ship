@@ -1,18 +1,4 @@
----
-layout: default
-title: "Palantir Foundry vs Traditional Cloud Data Platforms"
----
-
-
-
-
-# Palantir Foundry vs Traditional Cloud Data Platforms                             
-                              
-<img src="./images/06-cloud-platforms-and-foundry.png" width="95%" align="center" alt="MLOps in Palantir Foundry" />                          
-                          
-                          
----                          
-                          
+# Palantir Foundry vs Traditional Cloud Data Platform
 
 
 ## Collab
@@ -307,8 +293,6 @@ Usually requires:
 - Custom deployment scripts
 - Manual data validation
 
-➡️ Not platform-native.
-
 ## 4. Dataset Versioning + Time Travel by Default
 
 In Palantir Foundry, datasets are not mutable tables that get overwritten.
@@ -326,39 +310,38 @@ Every dataset is automatically:
 - Reproducible
 - Rollback capable
 - Auditable
-Each version is tied to:
-- Input versions
-- Transform code
-- Execution context
-You can instantly answer:
-“What did this dataset look like 3 months ago?”
+- Each version is tied to:
+  1. Input versions
+  2. Transform code
+  3. Execution context
+- You can instantly answer: “What did this dataset look like 3 months ago?”
 - Engineers can time-travel, compare versions, and roll back if needed.
-Traditional Cloud
-- Requires specific storage formats:
-- Delta Lake
-- Iceberg
+- Traditional Cloud:
+     1. Requires specific storage formats
+     2. Delta Lake
+     3. Iceberg
 
 Additionally it requires:
 - Extra configuration
 - Retention policies
 - Storage planning
-➡️ Not universal across the stack.
 
 ## 5. Policy-Aware Data — Security Travels With Data
 In Palantir Foundry, security is embedded directly into datasets and ontology objects, making data policy-aware by design.
 
 Supported controls include:
-Row-level filters
-Column masking
-Object-level permissions
-Ontology-aware access rules
-Policy inheritance downstream
-When data flows → policies flow with it.
-Security rules are defined once and automatically enforced across:
-Transforms
-Notebooks
-Applications
-Analytics tools
+- Row-level filters
+- Column masking
+- Object-level permissions
+- Ontology-aware access rules
+- Policy inheritance downstream
+- When data flows → policies flow with it.
+  
+  Security rules are defined once and automatically enforced across:
+- Transforms
+- Notebooks
+- Applications
+- Analytics tools
 
 Derived datasets inherit upstream protections, reducing policy drift.
 ```bash
@@ -381,20 +364,19 @@ Operational workflows
 - Case management
 - Decision systems
 - Action controls
-Traditional Cloud
-Security is usually:
+  
+In Traditional Cloud Security is usually:
 - Tool-specific
 - Warehouse-specific
 - BI-specific
 - IAM-specific
-
-➡️ High policy drift risk across layers.
 
 ## 6. Operational Applications Built Directly on Data
 
 Palantir Foundry enables teams to build operational applications directly on governed datasets and ontology objects, not just analytics dashboards.
 
 Because entities, relationships, actions, workflows, and security are native, organizations can build:
+
 - Investigation tools
 - Case management systems
 - Decision workflows
@@ -431,8 +413,6 @@ Requires:
 - Auth integration
 - Sync with analytics layer
 
-➡️ Higher system fragmentation.
-
 
 ## 7. Automatic Dependency Recompute
 
@@ -464,22 +444,16 @@ Requires:
 - Manual dependency modeling
 - Backfill scripting
 
-➡️ Operationally heavier.
-
 ## 8. Unified Governance + Engineering + Analytics UX
 
 Foundry provides a unified platform experience where Data engineers, Analysts, Governance teams, Operations users, Business users work on the same Datasets, Lineage graphs, Ontology objects, Security policies and Metadata.
 
 This shared context reduces tool fragmentation and prevents metadata drift.
 
-Traditional Cloud
-Different tools for:
+Traditional Cloud has different tools for:
 - Engineering
 - Governance
 - BI
-
-Catalog
-➡️ Context fragmentation.
 
 ## 9. Human-in-the-Loop Data Workflows
 
