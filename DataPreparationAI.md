@@ -372,7 +372,7 @@ Pipeline Builder transforms messy, unstructured documents into precise, semantic
 
 ### 2.)Unstructured Data preparation for AI modals using code repository:
 Preparing unstructured data, such as PDFs, for AI model training and inference is a common workflow in Palantir Foundry. This article outlines a robust, production-ready pipeline using the Foundry code repository, covering data ingestion from Microsoft SharePoint, PDF extraction (with a comparison of available libraries), normalization, semantic chunking, embedding strategies, vector database integration, data versioning, and guidance on choosing between snapshot and incremental transforms.
-![C1](images/5_DataAI_C1.png)
+![C2](images/5_DataAI_C2.png)
 
 #### Step 1: Data Ingestion from Microsoft SharePoint
 Foundry provides a SharePoint Online connector for ingesting files (including PDFs) directly into datasets. The connector supports file-based ingestion and can be configured for scheduled syncs.<br>
@@ -384,7 +384,7 @@ Foundry provides a SharePoint Online connector for ingesting files (including PD
 -	Configure the connector to ingest files from your SharePoint site. The connector preserves file formats, so PDFs remain unchanged for downstream processing.
 
 Note: Only SharePoint Online is supported natively. For on-premises SharePoint, use a REST API source type instead.<br>
-<img width="975" height="502" alt="image" src="https://github.com/user-attachments/assets/86ec4b8a-5cf7-4623-a3d3-24c8407fa5af" />
+![C1](images/5_DataAI_C1.png)
 
 #### Step 2: Data Extraction from PDFs
 
