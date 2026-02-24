@@ -1,4 +1,17 @@
-# Palantir Foundry vs Traditional Cloud Data Platform
+---
+layout: default
+title: "Palantir Foundry vs Traditional Cloud Data Platforms"
+---
+
+
+
+
+# Palantir Foundry vs Traditional Cloud Data Platforms                             
+                              
+<img src="./images/06-cloud-platforms-and-foundry.png" width="95%" align="center" alt="MLOps in Palantir Foundry" />                          
+                          
+                          
+---  
 
 
 ## Collab
