@@ -326,7 +326,7 @@
 				</li>
 			</ol>
 			<p style="margin-top: 10px;">
-				<a href="https://github.com/shauryashaurya/rocket-ship/blob/main/DataPreparationAI.md">See on GitHub</a>
+				<a href="https://github.com/shauryashaurya/rocket-ship/blob/main/DataPreparationAI.md">View on GitHub</a>
 			</p>
 		</td>
 		<td width="60%"
