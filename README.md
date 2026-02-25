@@ -153,7 +153,7 @@
     <tr style="border: 0 !important; background-color: #ffffff !important;">
         <td width="40%" valign="top" style="vertical-align: top !important; padding: 10px; border: 0 !important; background-color: #ffffff !important; border-color: #ffffff !important;">
             <h3 style="margin: 0 !important; padding: 0 !important; line-height: 1.2;">
-                <span style="font-size: 1.25em; font-weight: bold;">07</span> 
+                <font size="+4"><b>07</b></font>
                 <a href="https://shauryashaurya.github.io/rocket-ship/DataPreparationAI">Data Preparation for AI</a>
             </h3>
             <h4 style="margin-top: 15px !important; margin-bottom: 5px !important;">Collaborators:</h4>
