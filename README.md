@@ -140,3 +140,25 @@
 </table>
 
 <hr />
+
+
+<hr />
+            
+<table border="0" cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 0 !important; background-color: #ffffff !important; border-style: hidden !important;">
+    <tr style="border: 0 !important; background-color: #ffffff !important;">
+        <td width="40%" valign="top" style="vertical-align: top !important; padding: 10px; border: 0 !important; background-color: #ffffff !important; border-color: #ffffff !important;">
+            <h3 style="margin: 0 !important; padding: 0 !important; line-height: 1.2;">07 <a href="https://github.com/shauryashaurya/rocket-ship/blob/main/DataPreparationAI.md"><strong>Data Preparation for AI</strong> in Palantir Foundry</a></h3>
+            <h4 style="margin-top: 15px !important; margin-bottom: 5px !important;">Collaborators:</h4>
+            <ol style="margin-top: 0 !important;">
+                <li><a href="https://github.com/shrutiraj25">Shruti Raj</a>, <a href="http://linkedin.com/in/shruti-raj7">LinkedIn</a></li>
+				<li><a href="https://github.com/pavankumarbusetty">Pavan Kumar Busetty</a>, <a href="https://www.linkedin.com/in/pavankumar-busetty/">LinkedIn</a></li>
+                <li><a href="https://github.com/shivanidp7">Shivani Patil</a>, <a href="https://www.linkedin.com/in/shivani-patil-0b0825208?utm_source=share_via&utm_content=profile&utm_medium=member_android">LinkedIn</a></li>
+            </ol>
+        </td>
+        <td width="60%" valign="top" style="vertical-align: top !important; padding: 10px; border: 0 !important; background-color: #ffffff !important; border-color: #ffffff !important;">
+            <img src="./images/5_DataAI_Main.png" width="100%" style="display: block; margin: 0 !important; padding: 0 !important; border: 0 !important; outline: none !important; box-shadow: none !important;" alt="Data Preparation for AI" />
+        </td>
+    </tr>
+</table>
+               
+<hr />
