@@ -374,7 +374,7 @@ Applications:<br>
 
 Pipeline Builder transforms messy, unstructured documents into precise, semantically rich embeddings—ready for AI models, copilots, and enterprise search with full transparency and traceability.
 
-### 2.)Unstructured Data preparation for AI modals using code repository:
+### 2.)Unstructured Data preparation using code repository:
 Preparing unstructured data, such as PDFs, for AI model training and inference is a common workflow in Palantir Foundry. This article outlines a robust, production-ready pipeline using the Foundry code repository, covering data ingestion from Microsoft SharePoint, PDF extraction (with a comparison of available libraries), normalization, semantic chunking, embedding strategies, vector database integration, data versioning, and guidance on choosing between snapshot and incremental transforms.
 ![C2](images/5_DataAI_C2.png)
 
